@@ -1,0 +1,6 @@
+# UE4 PreloadingPlugin使用方式
+
+1. 创建预加载行为类型![image.png](https://cdn.nlark.com/yuque/0/2019/png/166447/1576553737066-45e8bae7-52f5-476f-bed5-9c7c02e7d5be.png#align=left&display=inline&height=238&name=image.png&originHeight=238&originWidth=762&size=33446&status=done&style=none&width=762)
+1. 按照注释和模版使用![image.png](https://cdn.nlark.com/yuque/0/2019/png/166447/1576553824640-cf436405-47b6-4123-9cda-33c8f4622b56.png#align=left&display=inline&height=1016&name=image.png&originHeight=1016&originWidth=1838&size=371028&status=done&style=none&width=1838)在外部系统中调用预加载行为类的自定义事件![image.png](https://cdn.nlark.com/yuque/0/2019/png/166447/1576553942980-d479e608-00e8-4ece-8354-655847c190a2.png#align=left&display=inline&height=257&name=image.png&originHeight=257&originWidth=990&size=89788&status=done&style=none&width=990)
+1. 自动生成预加载数据![image.png](https://cdn.nlark.com/yuque/0/2019/png/166447/1576554421556-92002a8b-039f-48b6-810d-b272dfd134e4.png#align=left&display=inline&height=715&name=image.png&originHeight=715&originWidth=885&size=173840&status=done&style=none&width=885)
+1. 设置行为类型资源路径![image.png](https://cdn.nlark.com/yuque/0/2019/png/166447/1576566657167-ec51face-c0bd-4634-bccb-26e693b1d168.png#align=left&display=inline&height=832&name=image.png&originHeight=832&originWidth=1474&size=341510&status=done&style=none&width=1474)
