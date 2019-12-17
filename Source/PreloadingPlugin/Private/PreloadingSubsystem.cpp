@@ -10,11 +10,12 @@
 #include "ARFilter.h"
 #include "Engine/ObjectLibrary.h"
 
-__pragma(optimize("", off))
+//__pragma(optimize("", off))
 
 UPreloadingBehavior* UPreloadingSubsystem::GetPreloadingBehavior(TSubclassOf<UPreloadingBehavior> Class)
 {
-	return *BehaviorMap.Find(Class);
+	UPreloadingBehavior** Find = BehaviorMap.Find(Class);
+	return Find ? *Find : nullptr;
 }
 
 void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -23,8 +24,6 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
 	// 加载资源目录
-	TArray< FString > ContentPaths;
-	ContentPaths.Add(TEXT("/Game"));
 	AssetRegistry.ScanPathsSynchronous(ContentPaths);
 	
 	// 加载PreloadingBehaviorBlueprint类型
@@ -33,7 +32,10 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 		FARFilter Filter;
 		Filter.ClassNames.Add(UPreloadingBehaviorBlueprint::StaticClass()->GetFName());
-		Filter.PackagePaths.Add(TEXT("/Game"));
+		for (auto& ContentPath : ContentPaths)
+		{
+			Filter.PackagePaths.Add(FName(*ContentPath));
+		}
 		Filter.bRecursiveClasses = true;
 		Filter.bRecursivePaths = true;
 
@@ -67,4 +69,4 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		}
 	}
 }
-__pragma(optimize("", on))
+//__pragma(optimize("", on))

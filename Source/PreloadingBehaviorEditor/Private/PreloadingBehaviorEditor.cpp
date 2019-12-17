@@ -1,13 +1,22 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
-#include "PreloadingBehaviorEditor/Public/PreloadingBehaviorEditor.h"
-#include "PreloadingBehaviorEditor/Public/PreloadingBehaviorAssetType.h"
+#include "PreloadingBehaviorEditor.h"
+#include "PreloadingBehaviorAssetType.h"
 #include "AssetTypeCategories.h"
+#include "ISettingsModule.h"
+#include "PreloadingSubsystem.h"
 
 #define LOCTEXT_NAMESPACE "FPreloadingBehaviorEditorModule"
 
 void FPreloadingBehaviorEditorModule::StartupModule()
 {
+	ISettingsModule& SettingsModule = FModuleManager::LoadModuleChecked<ISettingsModule>("Settings");
+	SettingsModule.RegisterSettings("Project", "Plugins", "PreloadingSubsystemSettings",
+		LOCTEXT("RuntimeSettingsName", "PreloadingPlugin"),
+		LOCTEXT("RuntimeSettingsDescription", "预加载框架插件"),
+		GetMutableDefault<UPreloadingSubsystem>()
+	);
+
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 	EAssetTypeCategories::Type Category = AssetTools.RegisterAdvancedAssetCategory(FName(TEXT("Preloading")), LOCTEXT("PreloadingAssetCategory", "Preloading"));
 	TSharedRef<IAssetTypeActions> AssetTypeActions_PreloadBehavior = MakeShareable(new FAssetTypeActions_PreloadBehavior(Category));

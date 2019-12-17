@@ -41,7 +41,8 @@ public class PreloadingBehaviorEditor : ModuleRules
 				"AssetTools",
 				"UnrealEd",
 				"Kismet",
-				"PreloadingPlugin"
+				"PreloadingPlugin",
+				"Settings"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
