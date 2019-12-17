@@ -25,7 +25,7 @@ private:
 	EAssetTypeCategories::Type MyAssetCategory;
 };
 
-UCLASS(HideCategories = Object)
+UCLASS(HideCategories = Object, config = PreloadingSubsystemSettings)
 class PRELOADINGBEHAVIOREDITOR_API UPreloadingBehaviorBlueprintFactory : public UBlueprintFactory
 {
 	GENERATED_BODY()
@@ -36,6 +36,10 @@ public:
 	// UFactory Interface
 	virtual bool ConfigureProperties() override { return true; };
 	virtual UObject* FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn, FName CallingContext) override;
+public:
+	// 创建PreloadingBehavior资源时的模版
+	UPROPERTY(Config, EditAnywhere, Category = EditorSettings)
+	TSoftObjectPtr<UPreloadingBehaviorBlueprint> PreloadingBehaviorTemplate;
 };
 
 class PRELOADINGBEHAVIOREDITOR_API FPreloadingBehaviorEditor : public FBlueprintEditor

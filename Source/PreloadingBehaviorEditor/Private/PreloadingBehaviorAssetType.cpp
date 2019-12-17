@@ -9,6 +9,7 @@ UPreloadingBehaviorBlueprintFactory::UPreloadingBehaviorBlueprintFactory(const F
 	bEditAfterNew = true;
 	SupportedClass = UPreloadingBehaviorBlueprint::StaticClass();
 	ParentClass = UPreloadingBehavior::StaticClass();
+	PreloadingBehaviorTemplate = FSoftObjectPath(TEXT("/PreloadingPlugin/BP_PreloadingBehaviorTemplate.BP_PreloadingBehaviorTemplate"));
 }
 
 UObject* UPreloadingBehaviorBlueprintFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn, FName CallingContext)
@@ -28,8 +29,8 @@ UObject* UPreloadingBehaviorBlueprintFactory::FactoryCreateNew(UClass* Class, UO
 		UClass* BlueprintGeneratedClass = UPreloadingBehaviorBlueprintGeneratedClass::StaticClass();
 		UBlueprint* newBP = FKismetEditorUtilities::CreateBlueprint(ParentClass, InParent, Name, BPTYPE_Normal, BlueprintClass, BlueprintGeneratedClass, CallingContext);
 
-		FString bpFile = TEXT("/PreloadingPlugin/BP_PreloadingBehaviorTemplate");
-		UObject* loadedObject = StaticLoadObject(UObject::StaticClass(), nullptr, *bpFile);
+		auto Template = TSoftObjectPtr<UPreloadingBehaviorBlueprint>(FSoftObjectPath(TEXT("/PreloadingPlugin/BP_PreloadingBehaviorTemplate.BP_PreloadingBehaviorTemplate")));
+		UObject* loadedObject = PreloadingBehaviorTemplate.IsNull()? Template.LoadSynchronous() : PreloadingBehaviorTemplate.LoadSynchronous();
 		UBlueprint* templateBP = Cast<UBlueprint>(loadedObject);
 		UBlueprint* newBP2 = FKismetEditorUtilities::ReplaceBlueprint(newBP, templateBP);
 

@@ -16,6 +16,11 @@ void FPreloadingBehaviorEditorModule::StartupModule()
 		LOCTEXT("RuntimeSettingsDescription", "预加载框架插件"),
 		GetMutableDefault<UPreloadingSubsystem>()
 	);
+	SettingsModule.RegisterSettings("Project", "Plugins", "PreloadingSubsystemSettings",
+		LOCTEXT("RuntimeSettingsName", "PreloadingPlugin"),
+		LOCTEXT("RuntimeSettingsDescription", "预加载框架插件"),
+		GetMutableDefault<UPreloadingBehaviorBlueprintFactory>()
+	);
 
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 	EAssetTypeCategories::Type Category = AssetTools.RegisterAdvancedAssetCategory(FName(TEXT("Preloading")), LOCTEXT("PreloadingAssetCategory", "Preloading"));
