@@ -1,5 +1,6 @@
-#include "PreloadingBehaviorEditor/Public/PreloadingBehaviorAssetType.h"
+#include "PreloadingBehaviorAssetType.h"
 #include "Kismet2/KismetEditorUtilities.h"
+#include "PreloadingSubsystem.h"
 
 #define LOCTEXT_NAMESPACE "FPreloadingBehaviorEditorModule"
 
@@ -9,7 +10,6 @@ UPreloadingBehaviorBlueprintFactory::UPreloadingBehaviorBlueprintFactory(const F
 	bEditAfterNew = true;
 	SupportedClass = UPreloadingBehaviorBlueprint::StaticClass();
 	ParentClass = UPreloadingBehavior::StaticClass();
-	PreloadingBehaviorTemplate = FSoftObjectPath(TEXT("/PreloadingPlugin/BP_PreloadingBehaviorTemplate.BP_PreloadingBehaviorTemplate"));
 }
 
 UObject* UPreloadingBehaviorBlueprintFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn, FName CallingContext)
@@ -30,7 +30,7 @@ UObject* UPreloadingBehaviorBlueprintFactory::FactoryCreateNew(UClass* Class, UO
 		UBlueprint* newBP = FKismetEditorUtilities::CreateBlueprint(ParentClass, InParent, Name, BPTYPE_Normal, BlueprintClass, BlueprintGeneratedClass, CallingContext);
 
 		auto Template = TSoftObjectPtr<UPreloadingBehaviorBlueprint>(FSoftObjectPath(TEXT("/PreloadingPlugin/BP_PreloadingBehaviorTemplate.BP_PreloadingBehaviorTemplate")));
-		UObject* loadedObject = PreloadingBehaviorTemplate.IsNull()? Template.LoadSynchronous() : PreloadingBehaviorTemplate.LoadSynchronous();
+		UObject* loadedObject = GetMutableDefault<UPreloadingSubsystemSettings>()->PreloadingBehaviorTemplate.IsNull()? Template.LoadSynchronous() : GetMutableDefault<UPreloadingSubsystemSettings>()->PreloadingBehaviorTemplate.LoadSynchronous();
 		UBlueprint* templateBP = Cast<UBlueprint>(loadedObject);
 		UBlueprint* newBP2 = FKismetEditorUtilities::ReplaceBlueprint(newBP, templateBP);
 

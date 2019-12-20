@@ -12,10 +12,22 @@
 
 //__pragma(optimize("", off))
 
+UPreloadingSubsystemSettings::UPreloadingSubsystemSettings(const FObjectInitializer& ObjectInitializer)
+{
+	PreloadingBehaviorTemplate = FSoftObjectPath(TEXT("/PreloadingPlugin/BP_PreloadingBehaviorTemplate.BP_PreloadingBehaviorTemplate"));
+}
+
 UPreloadingBehavior* UPreloadingSubsystem::GetPreloadingBehavior(TSubclassOf<UPreloadingBehavior> Class)
 {
 	UPreloadingBehavior** Find = BehaviorMap.Find(Class);
 	return Find ? *Find : nullptr;
+}
+
+TArray<UPreloadingBehavior*> UPreloadingSubsystem::GetAllPreloadingBehavior()
+{
+	TArray<UPreloadingBehavior*> OutArray;
+	BehaviorMap.GenerateValueArray(OutArray);
+	return OutArray;
 }
 
 void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -24,7 +36,7 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
 	// 加载资源目录
-	AssetRegistry.ScanPathsSynchronous(ContentPaths);
+	AssetRegistry.ScanPathsSynchronous(GetMutableDefault<UPreloadingSubsystemSettings>()->ContentPaths);
 	
 	// 加载PreloadingBehaviorBlueprint类型
 	{
@@ -32,7 +44,7 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 		FARFilter Filter;
 		Filter.ClassNames.Add(UPreloadingBehaviorBlueprint::StaticClass()->GetFName());
-		for (auto& ContentPath : ContentPaths)
+		for (auto& ContentPath : GetMutableDefault<UPreloadingSubsystemSettings>()->ContentPaths)
 		{
 			Filter.PackagePaths.Add(FName(*ContentPath));
 		}

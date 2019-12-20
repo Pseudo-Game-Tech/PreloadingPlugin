@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Core.h"
 #include "PreloadingBehavior.h"
@@ -25,7 +25,7 @@ private:
 	EAssetTypeCategories::Type MyAssetCategory;
 };
 
-UCLASS(HideCategories = Object, config = PreloadingSubsystemSettings)
+UCLASS(hidecategories = Object)
 class PRELOADINGBEHAVIOREDITOR_API UPreloadingBehaviorBlueprintFactory : public UBlueprintFactory
 {
 	GENERATED_BODY()
@@ -36,10 +36,6 @@ public:
 	// UFactory Interface
 	virtual bool ConfigureProperties() override { return true; };
 	virtual UObject* FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn, FName CallingContext) override;
-public:
-	// ´´½¨PreloadingBehavior×ÊÔ´Ê±µÄÄ£°æ
-	UPROPERTY(Config, EditAnywhere, Category = EditorSettings)
-	TSoftObjectPtr<UPreloadingBehaviorBlueprint> PreloadingBehaviorTemplate;
 };
 
 class PRELOADINGBEHAVIOREDITOR_API FPreloadingBehaviorEditor : public FBlueprintEditor
