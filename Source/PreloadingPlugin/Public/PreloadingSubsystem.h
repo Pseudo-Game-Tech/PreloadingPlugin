@@ -25,7 +25,8 @@ UCLASS()
 class PRELOADINGPLUGIN_API UPreloadingSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-public:	// 获取PreloadingBehavior
+public:	
+	// 获取PreloadingBehavior
 	UFUNCTION(BlueprintCallable, Category = "PreloadingBehavior")
 	UPreloadingBehavior* GetPreloadingBehavior(TSubclassOf<UPreloadingBehavior> Class);
 	
@@ -41,6 +42,9 @@ public:	// 获取PreloadingBehavior
 
 	// Subsystem 接口
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
+	// 确保加载蓝图类型
+	static void LoadBlueprintClass();
 private:
 	UPROPERTY()
 	TMap<TSubclassOf<UPreloadingBehavior>, UPreloadingBehavior*> BehaviorMap;

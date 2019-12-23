@@ -5,6 +5,7 @@
 #include "AssetTypeCategories.h"
 #include "ISettingsModule.h"
 #include "PreloadingSubsystem.h"
+#include "AssetRegistryModule.h"
 
 #define LOCTEXT_NAMESPACE "FPreloadingBehaviorEditorModule"
 
@@ -29,6 +30,10 @@ void FPreloadingBehaviorEditorModule::ShutdownModule()
 	// we call this function before unloading the module.
 }
 
+class FTempSubsystemCollection : public FSubsystemCollectionBase
+{
+
+};
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FPreloadingBehaviorEditorModule, PreloadingBehaviorEditor)

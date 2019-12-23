@@ -1,0 +1,1 @@
+"E:\work_D\UE_4.22\Engine\Binaries\Win64\UE4Editor-cmd.exe" "D:\work_D\PTest\PTest.uproject" -run=PreloadingBehaviorEditor.PreloadingSubsystemCommandlet

@@ -17,7 +17,7 @@ public class PreloadingBehaviorEditor : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				// ... add other private include paths required here ...
+				
 			}
 			);
 			
@@ -42,7 +42,8 @@ public class PreloadingBehaviorEditor : ModuleRules
 				"UnrealEd",
 				"Kismet",
 				"PreloadingPlugin",
-				"Settings"
+				"Settings",
+				"AssetRegistry",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

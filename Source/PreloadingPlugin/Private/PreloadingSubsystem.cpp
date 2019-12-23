@@ -32,12 +32,30 @@ TArray<UPreloadingBehavior*> UPreloadingSubsystem::GetAllPreloadingBehavior()
 
 void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
+	LoadBlueprintClass();
+
+	// 自动注册所有UPreloadingBehavior子类
+	{
+		TArray<UClass*> Classes;
+		GetDerivedClasses(UPreloadingBehavior::StaticClass(), Classes, true);
+		for (UClass* BehaviorClass : Classes)
+		{
+			if (!BehaviorClass->GetName().StartsWith(TEXT("SKEL_")) && !BehaviorClass->GetName().StartsWith(TEXT("REINST_")) && !BehaviorClass->HasAllClassFlags(CLASS_Abstract))
+			{
+				UPreloadingBehavior*& PreloadingBehavior = BehaviorMap.Add(BehaviorClass);
+				PreloadingBehavior = NewObject<UPreloadingBehavior>(this, BehaviorClass);
+			}
+		}
+	}
+}
+void UPreloadingSubsystem::LoadBlueprintClass()
+{
 	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked< FAssetRegistryModule >(FName("AssetRegistry"));
 	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
 	// 加载资源目录
 	AssetRegistry.ScanPathsSynchronous(GetMutableDefault<UPreloadingSubsystemSettings>()->ContentPaths);
-	
+
 	// 加载PreloadingBehaviorBlueprint类型
 	{
 		FName BaseClassName = UPreloadingBehavior::StaticClass()->GetFName();
@@ -63,20 +81,6 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 			{
 				// 加载蓝图对象
 				TSoftClassPtr< UObject >(FStringAssetReference(FPackageName::ExportTextPathToObjectPath(GeneratedClassValue.GetValue()))).LoadSynchronous();
-			}
-		}
-	}
-
-	// 自动注册所有UPreloadingBehavior子类
-	{
-		TArray<UClass*> Classes;
-		GetDerivedClasses(UPreloadingBehavior::StaticClass(), Classes, true);
-		for (UClass* BehaviorClass : Classes)
-		{
-			if (!BehaviorClass->GetName().StartsWith(TEXT("SKEL_")) && !BehaviorClass->GetName().StartsWith(TEXT("REINST_")) && !BehaviorClass->HasAllClassFlags(CLASS_Abstract))
-			{
-				UPreloadingBehavior*& PreloadingBehavior = BehaviorMap.Add(BehaviorClass);
-				PreloadingBehavior = NewObject<UPreloadingBehavior>(this, BehaviorClass);
 			}
 		}
 	}

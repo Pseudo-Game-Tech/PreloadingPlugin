@@ -35,7 +35,7 @@ protected:
 	TMap<FName, FPreloadingData> PreloadingDataMap;
 	// 异步加载时的优先级 ( 0-100 )
 	UPROPERTY(EditDefaultsOnly, Category = "PreloadingData")
-	int32 Priority = 50;
+	int32 Priority = 0;
 public:
 	// 用于自动生成数据的,通过蓝图编辑器脚本调用( 右键当前资源>脚本化操作>生成PreloadingBehavior数据 )
 	UFUNCTION(BlueprintImplementableEvent, Category = "PreloadingBehavior")
