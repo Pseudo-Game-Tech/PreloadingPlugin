@@ -6,6 +6,14 @@ UPreloadingBehavior::~UPreloadingBehavior()
 	{
 		PermanentlyLoadAssetsHandle->ReleaseHandle();
 	}
+
+	for (auto& Pair : NowPreloading)
+	{
+			if (Pair.Value.IsValid())
+			{
+				Pair.Value->ReleaseHandle();
+			}
+	}
 }
 //__pragma(optimize("", off))
 void UPreloadingBehavior::Loading(FName PreloadingDataMapKey)
