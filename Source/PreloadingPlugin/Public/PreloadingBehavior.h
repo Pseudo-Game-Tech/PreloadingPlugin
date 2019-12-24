@@ -29,6 +29,7 @@ class PRELOADINGPLUGIN_API UPreloadingBehavior : public UObject
 	GENERATED_BODY()
 	friend class UPreloadingSubsystem;
 
+public:
 	~UPreloadingBehavior();
 
 protected:
