@@ -28,24 +28,37 @@ class PRELOADINGPLUGIN_API UPreloadingBehavior : public UObject
 {
 	GENERATED_BODY()
 	friend class UPreloadingSubsystem;
+
+	~UPreloadingBehavior();
+
 protected:
 	// 通过GenerateData()生成的数据
 	// 由Loading()/UnLoading()使用
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PreloadingData")
 	TMap<FName, FPreloadingData> PreloadingDataMap;
+
+	// 永久加载的资源,在UPreloadingBehavior构造的时候就会加载
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PreloadingData")
+	TArray<FSoftObjectPath> PermanentlyLoadAssets;
+
 	// 异步加载时的优先级 ( 0-100 )
 	UPROPERTY(EditDefaultsOnly, Category = "PreloadingData")
 	int32 Priority = 0;
+
 public:
 	// 用于自动生成数据的,通过蓝图编辑器脚本调用( 右键当前资源>脚本化操作>生成PreloadingBehavior数据 )
 	UFUNCTION(BlueprintImplementableEvent, Category = "PreloadingBehavior")
 	void GenerateData();
+
 private:
 	TMap<FName, TSharedPtr<struct FStreamableHandle>> NowPreloading;
+
+	TSharedPtr<struct FStreamableHandle> PermanentlyLoadAssetsHandle;
 
 	// 开始异步加载PreloadingDataMap中指定Key关联的所有资源
 	UFUNCTION(BlueprintCallable, Category = "PreloadingBehavior")
 	void Loading(FName PreloadingDataMapKey);
+
 	// 释放PreloadingDataMap中指定Key关联的所有资源
 	UFUNCTION(BlueprintCallable, Category = "PreloadingBehavior")
 	void UnLoading(FName PreloadingDataMapKey);

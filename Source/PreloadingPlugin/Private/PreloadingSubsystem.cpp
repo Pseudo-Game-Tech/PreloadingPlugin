@@ -44,6 +44,13 @@ void UPreloadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 			{
 				UPreloadingBehavior*& PreloadingBehavior = BehaviorMap.Add(BehaviorClass);
 				PreloadingBehavior = NewObject<UPreloadingBehavior>(this, BehaviorClass);
+				// ¼ÓÔØÓÀ¾Ã×ÊÔ´
+				static const FString ContextString(TEXT("UPreloadingSubsystem::Initialize -> UPreloadingBehavior::PermanentlyLoadAssets"));
+				TSharedPtr<FStreamableHandle> Request = UAssetManager::GetStreamableManager().RequestAsyncLoad(PreloadingBehavior->PermanentlyLoadAssets, FStreamableDelegate(), PreloadingBehavior->Priority, true, false, ContextString);
+				if (Request.IsValid())
+				{
+					PreloadingBehavior->PermanentlyLoadAssetsHandle = Request;
+				}
 			}
 		}
 	}

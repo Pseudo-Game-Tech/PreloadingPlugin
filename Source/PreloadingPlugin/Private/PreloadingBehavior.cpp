@@ -1,5 +1,12 @@
 #include "PreloadingBehavior.h"
 #include "Engine/AssetManager.h"
+UPreloadingBehavior::~UPreloadingBehavior()
+{
+	if (PermanentlyLoadAssetsHandle.IsValid())
+	{
+		PermanentlyLoadAssetsHandle->ReleaseHandle();
+	}
+}
 //__pragma(optimize("", off))
 void UPreloadingBehavior::Loading(FName PreloadingDataMapKey)
 {
