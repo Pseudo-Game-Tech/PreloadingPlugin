@@ -19,6 +19,10 @@ public:
 	// 创建PreloadingBehavior资源时的模版
 	UPROPERTY(Config, EditAnywhere, Category = EditorSettings)
 	TSoftObjectPtr<UPreloadingBehaviorBlueprint> PreloadingBehaviorTemplate;
+
+	// 预加载数据表,用于共享预加载数据
+	UPROPERTY(Config, EditAnywhere, Category = EditorSettings)
+	TSoftObjectPtr<UDataTable> PreloadDataTable;
 };
 
 UCLASS()

@@ -16,4 +16,7 @@ class PRELOADINGPLUGIN_API UPreLoadBlueprintFunctionLibrary : public UBlueprintF
 
 	UFUNCTION(BlueprintCallable, Category = "PreloadingTool")
 	static void GeneratePreloadingBehaviorData(TArray<UObject*> PreloadingBehaviorList);
+
+	UFUNCTION(BlueprintCallable, Category = "PreloadingTool")
+	static void AddToPreloadDataTable(FName RowName, TArray<UObject*> AssetList, bool IsClear);
 };
