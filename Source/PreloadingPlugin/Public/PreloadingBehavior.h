@@ -11,6 +11,8 @@
 #include "Engine/DataTable.h"
 #include "PreloadingBehavior.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(PreloadingBehavior, Log, All);
+
 // 因为蓝图不支持嵌套的容器,用结构体套一层,使间接容器嵌套
 USTRUCT(BlueprintType)
 struct PRELOADINGPLUGIN_API FPreloadingData : public FTableRowBase

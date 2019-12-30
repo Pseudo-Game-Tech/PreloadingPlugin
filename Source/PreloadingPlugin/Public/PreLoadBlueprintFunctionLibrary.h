@@ -21,6 +21,7 @@ class PRELOADINGPLUGIN_API UPreLoadBlueprintFunctionLibrary : public UBlueprintF
 	UFUNCTION(BlueprintCallable, Category = "PreloadingTool")
 	static void AddToPreloadDataTable(FName RowName, TArray<UObject*> AssetList, bool IsClear);
 
+	// Depth深度参数-1为无限深度
 	UFUNCTION(BlueprintCallable, Category = "PreloadingTool")
-	static TArray<FSoftObjectPath> GatherShareDependenciesRecursively(const TArray<FSoftObjectPath> Assets, const float SharingRate);
+	static TArray<FSoftObjectPath> GatherShareDependenciesRecursively(const TArray<FSoftObjectPath> Assets, const float SharingRate, const int32 FindSoftReferenceDepth = 0, const int32 FindDepth = -1);
 };

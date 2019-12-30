@@ -47,7 +47,7 @@ void UPreLoadBlueprintFunctionLibrary::AddToPreloadDataTable(FName RowName, TArr
 	}
 }
 
-TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependenciesRecursively(const TArray<FSoftObjectPath> Assets, const float SharingRate)
+TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependenciesRecursively(const TArray<FSoftObjectPath> Assets, const float SharingRate, const int32 FindSoftReferenceDepth, const int32 FindDepth)
 {
 	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
@@ -58,17 +58,19 @@ TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependencie
 
 	for (auto& Asset : Assets)
 	{
+		int32 LayerCount = 1;
 		TSet<FName> AllDependencies;
 		TSet<FName> NowLayerAssets;
 		NowLayerAssets.Add(FName(*Asset.GetLongPackageName()));
 
-		while (NowLayerAssets.Num() > 0)
+		while (NowLayerAssets.Num() > 0 && (LayerCount <= FindDepth || FindDepth == -1))
 		{
 			TSet<FName> NextLayerAssets;
 			for (auto& NowAsset : NowLayerAssets)
 			{
 				TArray<FName> OutDependencies;
-				AssetRegistry.GetDependencies(NowAsset, OutDependencies, EAssetRegistryDependencyType::Hard);
+				EAssetRegistryDependencyType::Type RegistryDependencyType = LayerCount <= FindSoftReferenceDepth ? EAssetRegistryDependencyType::Packages : EAssetRegistryDependencyType::Hard;
+				AssetRegistry.GetDependencies(NowAsset, OutDependencies, RegistryDependencyType);
 
 				auto RemoveNativePackage = [](const FAssetIdentifier& InAsset) { return InAsset.PackageName.ToString().StartsWith(TEXT("/Script")) && !InAsset.IsValue(); };
 				OutDependencies.RemoveAll(RemoveNativePackage);
@@ -84,6 +86,7 @@ TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependencie
 
 			NowLayerAssets.Reset();
 			NowLayerAssets.Append(NextLayerAssets);
+			++LayerCount;
 		}
 
 		for (auto& Dependencies : AllDependencies)
