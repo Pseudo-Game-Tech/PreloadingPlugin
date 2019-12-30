@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AssetData.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PreLoadBlueprintFunctionLibrary.generated.h"
 
@@ -19,4 +20,7 @@ class PRELOADINGPLUGIN_API UPreLoadBlueprintFunctionLibrary : public UBlueprintF
 
 	UFUNCTION(BlueprintCallable, Category = "PreloadingTool")
 	static void AddToPreloadDataTable(FName RowName, TArray<UObject*> AssetList, bool IsClear);
+
+	UFUNCTION(BlueprintCallable, Category = "PreloadingTool")
+	static TArray<FSoftObjectPath> GatherShareDependenciesRecursively(const TArray<FSoftObjectPath> Assets, const float SharingRate);
 };
