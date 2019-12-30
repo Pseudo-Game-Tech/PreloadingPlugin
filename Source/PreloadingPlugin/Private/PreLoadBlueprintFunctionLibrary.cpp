@@ -7,7 +7,7 @@
 #include "AssetRegistryModule.h"
 #include "Engine/AssetManager.h"
 
-__pragma(optimize("", off))
+//__pragma(optimize("", off))
 void UPreLoadBlueprintFunctionLibrary::GeneratePreloadingBehaviorData(TArray<UObject*> PreloadingBehaviorList)
 {
 	for (auto Object : PreloadingBehaviorList)
@@ -58,8 +58,6 @@ TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependencie
 
 	for (auto& Asset : Assets)
 	{
-		TSharedPtr<FStreamableHandle> Handle = UAssetManager::GetStreamableManager().RequestSyncLoad(Asset);
-
 		TSet<FName> AllDependencies;
 		TSet<FName> NowLayerAssets;
 		NowLayerAssets.Add(FName(*Asset.GetLongPackageName()));
@@ -92,8 +90,6 @@ TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependencie
 		{
 			AllShareDependencies.FindOrAdd(Dependencies) += 1;
 		}
-
-		Handle->ReleaseHandle();
 	}
 
 	float SharingRate2 = FMath::Clamp(SharingRate, 0.f, 1.f);
@@ -114,4 +110,4 @@ TArray<FSoftObjectPath> UPreLoadBlueprintFunctionLibrary::GatherShareDependencie
 
 	return OutShareDependencies;
 }
-__pragma(optimize("", on))
+//__pragma(optimize("", on))
