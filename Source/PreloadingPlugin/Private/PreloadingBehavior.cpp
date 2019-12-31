@@ -1,7 +1,7 @@
 #include "PreloadingBehavior.h"
 #include "Engine/AssetManager.h"
 
-DEFINE_LOG_CATEGORY(PreloadingBehavior);
+DEFINE_LOG_CATEGORY(PreloadingBehaviorLOG);
 
 UPreloadingBehavior::~UPreloadingBehavior()
 {
@@ -29,7 +29,7 @@ void UPreloadingBehavior::Loading(FName PreloadingDataMapKey)
 		TSharedPtr<FStreamableHandle> Request = UAssetManager::GetStreamableManager().RequestAsyncLoad(Data->Assets, FStreamableDelegate(), Priority, true, false, ContextString);
 		if (Request.IsValid())
 		{
-			UE_LOG(PreloadingBehavior, Log, TEXT("%s::Loading(%s)"), *GetName(), *PreloadingDataMapKey.ToString());
+			UE_LOG(PreloadingBehaviorLOG, Log, TEXT("%s::Loading(%s)"), *GetName(), *PreloadingDataMapKey.ToString());
 			NowPreloading.Add(PreloadingDataMapKey, Request);
 		}
 	}
@@ -40,7 +40,7 @@ void UPreloadingBehavior::UnLoading(FName PreloadingDataMapKey)
 	TSharedPtr<FStreamableHandle> OutRemovedValue;
 	if (NowPreloading.RemoveAndCopyValue(PreloadingDataMapKey, OutRemovedValue))
 	{
-		UE_LOG(PreloadingBehavior, Log, TEXT("%s::UnLoading(%s)"), *GetName(), *PreloadingDataMapKey.ToString());
+		UE_LOG(PreloadingBehaviorLOG, Log, TEXT("%s::UnLoading(%s)"), *GetName(), *PreloadingDataMapKey.ToString());
 		OutRemovedValue->ReleaseHandle();
 	}
 }
